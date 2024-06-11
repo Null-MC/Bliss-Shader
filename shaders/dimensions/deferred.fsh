@@ -25,6 +25,12 @@ flat varying float centerDepth;
 
 uniform sampler2D noisetex;
 
+#ifdef IS_LPV_ENABLED
+	uniform usampler1D texBlockData;
+	uniform sampler3D texLpv1;
+	uniform sampler3D texLpv2;
+#endif
+
 uniform float frameTime;
 uniform int frameCounter;
 uniform float frameTimeCounter;
@@ -140,6 +146,13 @@ float linearizeDepthFast(const in float depth, const in float near, const in flo
 	#include "/lib/overworld_fog.glsl"
 	
 #endif
+
+#ifdef IS_LPV_ENABLED
+	#include "/lib/hsv.glsl"
+	#include "/lib/lpv_common.glsl"
+	#include "/lib/lpv_render.glsl"
+#endif
+
 #ifdef NETHER_SHADER
 	uniform sampler2D colortex4;
 	#include "/lib/nether_fog.glsl"
@@ -148,6 +161,7 @@ float linearizeDepthFast(const in float depth, const in float near, const in flo
 	uniform sampler2D colortex4;
 	#include "/lib/end_fog.glsl"
 #endif
+
 vec3 rodSample(vec2 Xi)
 {
 	float r = sqrt(1.0f - Xi.x*Xi.y);

@@ -19,6 +19,12 @@ uniform sampler2D colortex3;
 uniform sampler2D colortex6;
 uniform sampler2D colortex7;
 
+#ifdef IS_LPV_ENABLED
+	uniform usampler1D texBlockData;
+	uniform sampler3D texLpv1;
+	uniform sampler3D texLpv2;
+#endif
+
 flat varying vec3 WsunVec;
 uniform vec3 sunVec;
 uniform float sunElevation;
@@ -83,12 +89,19 @@ float linearizeDepthFast(const in float depth, const in float near, const in flo
 	#include "/lib/volumetricClouds.glsl"
 	#include "/lib/overworld_fog.glsl"
 #endif
+
+#ifdef IS_LPV_ENABLED
+	#include "/lib/hsv.glsl"
+	#include "/lib/lpv_common.glsl"
+	#include "/lib/lpv_render.glsl"
+#endif
+
 #ifdef NETHER_SHADER
-uniform sampler2D colortex4;
+	uniform sampler2D colortex4;
 	#include "/lib/nether_fog.glsl"
 #endif
 #ifdef END_SHADER
-uniform sampler2D colortex4;
+	uniform sampler2D colortex4;
 	#include "/lib/end_fog.glsl"
 #endif
 

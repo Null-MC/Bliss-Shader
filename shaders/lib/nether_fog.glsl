@@ -89,11 +89,19 @@ vec4 GetVolumetricFog(
 
 		vec3 vL0 = vec3(1.0,0.4,0.2) * exp(fireLight * -25) * exp(max(progressW.y-30,0.0) / -10) * 25;
 		vL0 += vec3(0.8,0.8,1.0) * (1.0 - exp(Density * -1)) / 10 ;
-
 		
 		// do background fog lighting	
 		float AirDensity = 0.01;
 		vec3 vL1 = fogcolor / 20.0;
+
+		#ifdef IS_LPV_ENABLED
+			vec3 lpvPos = GetLpvPosition(wpos);
+	        vec4 lpvSample = SampleLpvLinear(lpvPos);
+	        vec3 LpvTorchLight = GetLpvBlockLight(lpvSample);
+			//vL0 += 1.0 * LpvTorchLight;
+
+			vL += (LpvTorchLight - LpvTorchLight*exp(-Density*dd*dL)) * absorbance;
+		#endif
 
 		vL += (vL1 - vL1*exp(-AirDensity*dd*dL)) * absorbance;
 		vL += (vL0 - vL0*exp(-Density*dd*dL)) * absorbance;
