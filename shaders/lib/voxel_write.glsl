@@ -38,7 +38,7 @@ void PopulateShadowVoxel(const in vec3 playerPos) {
 					voxelId = uint(blockEntityId);
 			}
 			else if (currentRenderedItemId > 0 && currentRenderedItemId < 1200) {
-				if (entityId != ENTITY_ITEM_FRAME && entityId != ENTITY_PLAYER)
+				if (entityId != ENTITY_ITEM_FRAME && entityId != ENTITY_PLAYER_CURRENT)
 					voxelId = uint(currentRenderedItemId);
 			}
 			else {
